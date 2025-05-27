@@ -169,16 +169,17 @@ function App() {
   return (
     <div ref={containerRef} style={{
       width: '100vw',
-      maxWidth: '100vw', // 横幅を表示領域に制限
+      maxWidth: '100vw',
       height: '100vh',
       minHeight: '100vh',
-      minWidth: 0, // 横スクロール防止
+      minWidth: 0,
       background: '#f8f8f8',
       margin: 0,
-      padding: '0 8px 0 0', // 右paddingを2rem→8pxにして余白を減らす
+      padding: '0 8px 0 0',
       boxSizing: 'border-box',
       position: 'relative',
-      overflow: 'hidden',
+      overflowX: 'hidden', // 横スクロールのみ禁止
+      overflowY: 'auto',   // 縦スクロールは許可
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', margin: '0 2rem 0 1rem', background: 'linear-gradient(90deg, #e0e7ff 0%, #f3f6fa 100%)', boxShadow: '0 4px 24px #0002', position: 'relative', borderBottom: '2px solid #2563eb', minHeight: 80
