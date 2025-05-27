@@ -44,14 +44,15 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
           進捗{sortKey === 'status' ? (sortAsc ? '▲' : '▼') : ''}
         </th>
         <th style={{ cursor: 'pointer' }} onClick={() => { setSortKey('deadline'); setSortAsc(sortKey !== 'deadline' ? true : !sortAsc); }}>
-          締切{sortKey === 'deadline' ? (sortAsc ? '▲' : '▼') : ''}
+          納車日{sortKey === 'deadline' ? (sortAsc ? '▲' : '▼') : ''}
         </th>
         <th style={{ cursor: 'pointer' }} onClick={() => { setSortKey('start'); setSortAsc(sortKey !== 'start' ? true : !sortAsc); }}>
           着手日{sortKey === 'start' ? (sortAsc ? '▲' : '▼') : ''}
         </th>
-        <th>作業メニュー</th>
+        <th style={{whiteSpace: 'nowrap'}}>担当者</th>
+        <th style={{whiteSpace: 'nowrap'}}>作業メニュー</th>
         <th style={{ cursor: 'pointer' }} onClick={() => { setSortKey('estimatedHours'); setSortAsc(sortKey !== 'estimatedHours' ? true : !sortAsc); }}>
-          想定時間{sortKey === 'estimatedHours' ? (sortAsc ? '▲' : '▼') : ''}
+          想定実作業時間{sortKey === 'estimatedHours' ? (sortAsc ? '▲' : '▼') : ''}
         </th>
         <th>メモ</th>
         {dates.map(date => (
@@ -91,7 +92,7 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
               )}
             </td>
             <td style={{whiteSpace: 'nowrap'}}>
-              {/* バイク写真 */}
+              {/* バイク写真＋型番 */}
               {isEdit ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                   <label htmlFor={`photo-upload-${task.id}`} style={{ cursor: 'pointer' }}>
@@ -135,13 +136,22 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
                   >
                     ドラッグ&ドロップ可
                   </div>
+                  <input
+                    value={task.modelNumber ?? ''}
+                    style={{ width: 120, marginTop: 4 }}
+                    onChange={e => handleEdit(task.id, 'modelNumber', e.target.value)}
+                    placeholder="型番"
+                  />
                 </div>
               ) : (
-                task.photoUrl ? (
-                  <img src={task.photoUrl} alt="photo" width={200} style={{ borderRadius: 8, height: 'auto', maxHeight: 160, objectFit: 'contain', aspectRatio: 'auto 1/1' }} />
-                ) : (
-                  <FaBicycle style={{ fontSize: 80, color: '#8dbbff', background: '#f3f6fa', borderRadius: 8, border: '2px dashed #2563eb', width: 80, height: 80, display: 'block', margin: '0 auto' }} />
-                )
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                  {task.photoUrl ? (
+                    <img src={task.photoUrl} alt="photo" width={200} style={{ borderRadius: 8, height: 'auto', maxHeight: 160, objectFit: 'contain', aspectRatio: 'auto 1/1' }} />
+                  ) : (
+                    <FaBicycle style={{ fontSize: 80, color: '#8dbbff', background: '#f3f6fa', borderRadius: 8, border: '2px dashed #2563eb', width: 80, height: 80, display: 'block', margin: '0 auto' }} />
+                  )}
+                  <span style={{ color: '#888', fontSize: 13, marginTop: 2, whiteSpace: 'nowrap' }}>{task.modelNumber}</span>
+                </div>
               )}
             </td>
             <td style={{whiteSpace: 'nowrap'}}>
@@ -153,7 +163,7 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
             </td>
             <td style={{whiteSpace: 'nowrap'}}>
               {isEdit ? (
-                <input value={task.phone} style={{ width: 120 }} onChange={e => handleEdit(task.id, 'phone', e.target.value.replace(/[-ー−]/g, ''))} placeholder="09012345678" pattern="^[0-9]{10,11}$" maxLength={11} inputMode="numeric" />
+                <input value={task.phone} style={{ width: 120 }} onChange={e => handleEdit(task.id, 'phone', e.target.value.replace(/[-ー−]/g, ''))} placeholder="09012345678" inputMode="numeric" />
               ) : (
                 <span style={{ color: '#2563eb', fontWeight: 500 }}>{task.phone}</span>
               )}
@@ -189,11 +199,18 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
               )}
             </td>
             <td style={{whiteSpace: 'nowrap'}}>
+              {isEdit ? (
+                <input value={task.assignee ?? ''} style={{ width: 80 }} onChange={e => handleEdit(task.id, 'assignee', e.target.value)} placeholder="例: 佐藤" />
+              ) : (
+                <span style={{ color: '#2563eb', fontWeight: 500, whiteSpace: 'nowrap' }}>{task.assignee}</span>
+              )}
+            </td>
+            <td style={{whiteSpace: 'nowrap'}}>
               {/* 作業メニュー欄 */}
               {isEdit ? (
                 <input value={task.menu ?? ''} style={{ width: 120 }} onChange={e => handleEdit(task.id, 'menu', e.target.value)} placeholder="例: タイヤ交換" />
               ) : (
-                <span style={{ color: '#039be5', fontWeight: 500 }}>{task.menu}</span>
+                <span style={{ color: '#039be5', fontWeight: 500, whiteSpace: 'nowrap' }}>{task.menu}</span>
               )}
             </td>
             <td style={{whiteSpace: 'nowrap'}}>

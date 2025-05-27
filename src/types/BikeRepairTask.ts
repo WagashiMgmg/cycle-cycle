@@ -21,4 +21,6 @@ export interface BikeRepairTask {
   end: string;
   menu?: string;
   memo?: string;
+  assignee?: string; // 担当者
+  modelNumber?: string; // バイク型番
 }

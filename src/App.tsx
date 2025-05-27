@@ -23,6 +23,8 @@ function App() {
       end: dayjs().add(1, 'day').format('YYYY-MM-DD'),
       menu: '',
       memo: '',
+      assignee: '', // 担当者
+      modelNumber: '', // バイク型番
     },
     {
       id: '2',
@@ -37,6 +39,8 @@ function App() {
       end: dayjs().add(3, 'day').format('YYYY-MM-DD'),
       menu: '',
       memo: '',
+      assignee: '', // 担当者
+      modelNumber: '', // バイク型番
     },
   ]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -122,8 +126,11 @@ function App() {
         end: min.add(1, 'day').format('YYYY-MM-DD'),
         menu: '',
         memo: '',
+        assignee: '', // 担当者
+        modelNumber: '', // バイク型番
       },
     ]);
+    setEditRow(newId); // 追加直後に編集アンロック
   };
 
   // 編集ハンドラ
