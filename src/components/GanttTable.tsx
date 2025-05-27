@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FaBicycle, FaTrashAlt, FaLock, FaLockOpen } from 'react-icons/fa';
+import { FaBicycle, FaTrashAlt, FaLock, FaLockOpen, FaFlagCheckered } from 'react-icons/fa';
 import { statuses } from '../types/BikeRepairTask';
 import type { BikeRepairTask } from '../types/BikeRepairTask';
 import { statusColor } from '../utils/ganttUtils';
@@ -225,7 +225,7 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
               }
               if (i > startIdx && i <= endIdx) return null;
               if (i === deadlineIdx && (deadlineIdx < startIdx || deadlineIdx > endIdx)) {
-                return <td key={date}><span style={{ color: '#ff5252', fontWeight: 'bold' }}>▼</span></td>;
+                return <td key={date}><FaFlagCheckered/></td>;
               }
               return <td key={date}></td>;
             })}

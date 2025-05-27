@@ -1,7 +1,7 @@
 import { useMemo, useState, useRef, useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
 import './App.css';
-import { FaTools, FaPlus, FaMinus, FaTrashAlt, FaLock, FaLockOpen } from 'react-icons/fa';
+import { FaTools, FaPlus, FaMinus } from 'react-icons/fa';
 import { statuses } from './types/BikeRepairTask';
 import { GanttTable } from './components/GanttTable';
 import { getDatesArray } from './utils/ganttUtils';
@@ -169,15 +169,16 @@ function App() {
   return (
     <div ref={containerRef} style={{
       width: '100vw',
+      maxWidth: '100vw', // 横幅を表示領域に制限
       height: '100vh',
       minHeight: '100vh',
-      minWidth: '100vw',
+      minWidth: 0, // 横スクロール防止
       background: '#f8f8f8',
       margin: 0,
-      padding: '0 2rem 0 0', // 右だけ1remのpadding
+      padding: '0 8px 0 0', // 右paddingを2rem→8pxにして余白を減らす
       boxSizing: 'border-box',
-      overflow: 'auto',
       position: 'relative',
+      overflow: 'hidden',
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', margin: '0 2rem 0 1rem', background: 'linear-gradient(90deg, #e0e7ff 0%, #f3f6fa 100%)', boxShadow: '0 4px 24px #0002', position: 'relative', borderBottom: '2px solid #2563eb', minHeight: 80
@@ -251,12 +252,12 @@ function App() {
         margin: 0,
         marginTop: 0,
         padding: '24px 0 0 0',
-        width: '100vw',
+        width: '100%', // テーブル本体の横幅も100vw→100%に
         minWidth: 0,
         overflowX: 'auto',
         background: 'none',
       }}>
-        <div style={{ minWidth: 900, width: 'max-content', margin: '0 2rem 0 1rem', padding: 0 }}>
+        <div style={{ minWidth: 900, width: '100%', margin: '0 2rem 0 1rem', padding: 0 }}>
           <GanttTable
             taskList={filteredList}
             editRow={editRow}
