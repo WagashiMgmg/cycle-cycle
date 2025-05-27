@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef, useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
 import './App.css';
+import { FaTools, FaBicycle } from 'react-icons/fa';
 
 const statuses = [
   '未着手',
@@ -33,7 +34,7 @@ const tasks: BikeRepairTask[] = [
     name: '田中 太郎',
     phone: '09012345678',
     email: '',
-    photoUrl: 'https://placehold.jp/80x80.png',
+    photoUrl: '', // デフォルトは空
     status: '未着手',
     deadline: dayjs().add(2, 'day').format('YYYY-MM-DD'),
     estimatedHours: 3,
@@ -47,7 +48,7 @@ const tasks: BikeRepairTask[] = [
     name: '鈴木 次郎',
     phone: '08098765432',
     email: '',
-    photoUrl: 'https://placehold.jp/80x80.png',
+    photoUrl: '', // デフォルトは空
     status: '作業中',
     deadline: dayjs().add(4, 'day').format('YYYY-MM-DD'),
     estimatedHours: 2,
@@ -164,7 +165,7 @@ function App() {
         name: `新規顧客${n}`,
         phone: '',
         email: '',
-        photoUrl: 'https://placehold.jp/80x80.png',
+        photoUrl: '', // デフォルトは空
         status: '未着手',
         deadline: null,
         estimatedHours: 1,
@@ -225,18 +226,34 @@ function App() {
       position: 'relative',
     }}>
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', background: '#fff', boxShadow: '0 2px 8px #0001', position: 'relative',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', margin: '0 2rem 0 1rem', background: 'linear-gradient(90deg, #e0e7ff 0%, #f3f6fa 100%)', boxShadow: '0 4px 24px #0002', position: 'relative', borderBottom: '2px solid #2563eb', minHeight: 80
       }}>
-        <h2 style={{ margin: '0 2rem 0 1rem', padding: 16, width: '100%', textAlign: 'center', fontWeight: 700, fontSize: 24 }}>
-          自転車修理待ちダッシュボード
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, width: '100%', justifyContent: 'center' }}>
+          <FaTools style={{ fontSize: 32, color: '#8dbbff', filter: 'drop-shadow(0 1px 4px #0001)' }} />
+          <h1 style={{
+            margin: 0,
+            padding: '16px 2rem 16px 0',
+            fontWeight: 700,
+            fontSize: 30,
+            letterSpacing: 1.5,
+            color: '#8dbbff',
+            textShadow: '0 1px 4px #0001',
+            fontFamily: 'Inter, "Segoe UI", sans-serif',
+            borderRadius: 8,
+            boxShadow: 'none',
+            display: 'inline-block',
+            lineHeight: 1.1
+          }}>
+            Repair Dashboard
+          </h1>
+        </div>
         <div style={{ position: 'absolute', left: 180, top: 10, display: 'flex', gap: 12, alignItems: 'center', zIndex: 2 }}>
-          <button onClick={handleAdd} style={{ fontSize: 20, padding: '4px 16px', borderRadius: 8, background: '#039be5', color: '#fff', border: 'none', cursor: 'pointer', boxShadow: '0 2px 8px #0002' }}>＋</button>
+          <button onClick={handleAdd} style={{ fontSize: 20, padding: '4px 16px', borderRadius: 8, background: 'linear-gradient(90deg, #2563eb 0%, #039be5 100%)', color: '#fff', border: 'none', cursor: 'pointer', boxShadow: '0 2px 8px #2563eb44', fontWeight: 700, letterSpacing: 1 }}>＋</button>
         </div>
         <div style={{ position: 'absolute', right: Math.max((containerWidth - 1280) / 2, 32), top: 16, display: 'flex', gap: 12, alignItems: 'center' }}>
-          <label style={{ fontWeight: 500, color: '#2563eb', fontSize: 15 }}>
+          <label style={{ fontWeight: 700, color: '#2563eb', fontSize: 16, textShadow: '0 1px 0 #fff' }}>
             表示日数
-            <input type="number" min={7} max={365} value={ganttDays} onChange={e => setGanttDays(Number(e.target.value))} style={{ width: 60, marginLeft: 6, marginRight: 2 }} />日
+            <input type="number" min={7} max={365} value={ganttDays} onChange={e => setGanttDays(Number(e.target.value))} style={{ width: 60, marginLeft: 6, marginRight: 2, borderRadius: 6, border: '1px solid #2563eb', fontWeight: 600, color: '#2563eb', background: '#fff' }} />日
           </label>
         </div>
         <div style={{ position: 'absolute', left: 420, top: 10, display: 'flex', gap: 8, alignItems: 'center', zIndex: 2 }}>
@@ -245,7 +262,7 @@ function App() {
             value={searchName}
             onChange={e => setSearchName(e.target.value)}
             placeholder="名前で検索"
-            style={{ width: 120, fontSize: 15, border: '1px solid #ccc', borderRadius: 6, padding: '2px 8px' }}
+            style={{ width: 120, fontSize: 15, border: '1.5px solid #2563eb', borderRadius: 8, padding: '4px 12px', background: '#f3f6fa', color: '#2563eb', fontWeight: 600, boxShadow: '0 1px 4px #2563eb22' }}
           />
         </div>
       </div>
@@ -324,7 +341,11 @@ function App() {
                       {isEdit ? (
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                           <label htmlFor={`photo-upload-${task.id}`} style={{ cursor: 'pointer' }}>
-                            <img src={task.photoUrl} alt="photo" width={200} style={{ borderRadius: 8, border: '2px dashed #2563eb', background: '#f3f6fa', height: 'auto', maxHeight: 160, objectFit: 'contain', aspectRatio: 'auto 1/1' }} />
+                            {task.photoUrl ? (
+                              <img src={task.photoUrl} alt="photo" width={200} style={{ borderRadius: 8, border: '2px dashed #2563eb', background: '#f3f6fa', height: 'auto', maxHeight: 160, objectFit: 'contain', aspectRatio: 'auto 1/1' }} />
+                            ) : (
+                              <FaBicycle style={{ fontSize: 80, color: '#8dbbff', background: '#f3f6fa', borderRadius: 8, border: '2px dashed #2563eb', width: 80, height: 80, display: 'block', margin: '0 auto' }} />
+                            )}
                           </label>
                           <input
                             id={`photo-upload-${task.id}`}
@@ -362,7 +383,11 @@ function App() {
                           </div>
                         </div>
                       ) : (
-                        <img src={task.photoUrl} alt="photo" width={200} style={{ borderRadius: 8, height: 'auto', maxHeight: 160, objectFit: 'contain', aspectRatio: 'auto 1/1' }} />
+                        task.photoUrl ? (
+                          <img src={task.photoUrl} alt="photo" width={200} style={{ borderRadius: 8, height: 'auto', maxHeight: 160, objectFit: 'contain', aspectRatio: 'auto 1/1' }} />
+                        ) : (
+                          <FaBicycle style={{ fontSize: 80, color: '#8dbbff', background: '#f3f6fa', borderRadius: 8, border: '2px dashed #2563eb', width: 80, height: 80, display: 'block', margin: '0 auto' }} />
+                        )
                       )}
                     </td>
                     <td style={{whiteSpace: 'nowrap'}}>
