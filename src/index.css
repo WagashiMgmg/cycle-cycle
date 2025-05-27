@@ -1,0 +1,164 @@
+/*
+  cycle-cycle dashboard custom design
+  - Google Fonts: Inter
+  - Modern color palette (blue, gray, white, accent)
+  - Table, button, input, scrollbar, hover, focus, etc.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --accent: #f59e42;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --bg: #f6f8fa;
+  --surface: #fff;
+  --border: #e5e7eb;
+  --text: #222;
+  --text-light: #666;
+  --shadow: 0 2px 8px #0001;
+  --radius: 10px;
+  --font: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body, #root {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  min-height: 100vh;
+}
+
+h2 {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--primary-dark);
+  background: linear-gradient(90deg, var(--primary) 60%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+button {
+  font-family: var(--font);
+  font-weight: 600;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  cursor: pointer;
+}
+button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px #0002;
+}
+
+input, select {
+  font-family: var(--font);
+  font-size: 1em;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: #fff;
+  color: var(--text);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus {
+  border: 1.5px solid var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px #2563eb22;
+}
+input::placeholder {
+  color: #b0b6be;
+  opacity: 1;
+  font-weight: 400;
+}
+
+/* Table styles */
+table {
+  font-size: 1em;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+th, td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+th {
+  background: #f3f6fa;
+  color: var(--primary-dark);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Row hover */
+tbody tr:hover {
+  background: #f1f5fd;
+}
+
+/* Gantt bar */
+.gantt-bar {
+  height: 24px;
+  background: linear-gradient(90deg, var(--primary) 60%, var(--accent) 100%);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 1px 4px #0001;
+}
+.gantt-bar.done {
+  background: linear-gradient(90deg, var(--success) 60%, #b9fbc0 100%);
+}
+
+/* Deadline marker */
+.gantt-deadline {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 12px solid var(--danger);
+}
+
+/* Photo */
+td img {
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 1px 4px #0001;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  table, th, td {
+    font-size: 0.95em;
+    padding: 6px 4px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+}
