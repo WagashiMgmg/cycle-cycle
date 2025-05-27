@@ -70,10 +70,12 @@ function App() {
   }, []);
 
   // 日付範囲をganttDaysで可変に
+  const [ganttStart, setGanttStart] = useState(dayjs().format('YYYY-MM-DD'));
   const { min, max } = useMemo(() => {
-    const today = dayjs();
-    return { min: today, max: today.add(ganttDays - 1, 'day') };
-  }, [taskList, ganttDays]);
+    const min = dayjs(ganttStart);
+    const max = min.add(ganttDays - 1, 'day');
+    return { min, max };
+  }, [ganttStart, ganttDays]);
   const dates = useMemo(() => getDatesArray(min, max), [min, max]);
 
   // ソート・検索適用
@@ -241,6 +243,10 @@ function App() {
           </button>
         </div>
         <div style={{ position: 'absolute', right: Math.max((containerWidth - 1280) / 2, 32), top: 16, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <label style={{ fontWeight: 700, color: '#2563eb', fontSize: 16, textShadow: '0 1px 0 #fff' }}>
+            表示開始日
+            <input type="date" value={ganttStart} max={dayjs().add(365, 'day').format('YYYY-MM-DD')} onChange={e => setGanttStart(e.target.value)} style={{ width: 130, marginLeft: 6, marginRight: 2, borderRadius: 6, border: '1px solid #2563eb', fontWeight: 600, color: '#2563eb', background: '#fff' }} />
+          </label>
           <label style={{ fontWeight: 700, color: '#2563eb', fontSize: 16, textShadow: '0 1px 0 #fff' }}>
             表示日数
             <input type="number" min={7} max={365} value={ganttDays} onChange={e => setGanttDays(Number(e.target.value))} style={{ width: 60, marginLeft: 6, marginRight: 2, borderRadius: 6, border: '1px solid #2563eb', fontWeight: 600, color: '#2563eb', background: '#fff' }} />日
