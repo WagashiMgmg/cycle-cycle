@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FaBicycle } from 'react-icons/fa';
+import { FaBicycle, FaTrashAlt, FaLock, FaLockOpen } from 'react-icons/fa';
 import { statuses } from '../types/BikeRepairTask';
 import type { BikeRepairTask } from '../types/BikeRepairTask';
 import { statusColor } from '../utils/ganttUtils';
@@ -15,9 +15,11 @@ interface GanttTableProps {
   setSortKey: (key: keyof BikeRepairTask | null) => void;
   sortAsc: boolean;
   setSortAsc: (asc: boolean) => void;
+  deleteMode: boolean;
+  handleDelete: (id: string) => void;
 }
 
-export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEditRow, handleEdit, dates, sortKey, setSortKey, sortAsc, setSortAsc }) => (
+export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEditRow, handleEdit, dates, sortKey, setSortKey, sortAsc, setSortAsc, deleteMode, handleDelete }) => (
   <table style={{ borderCollapse: 'collapse', width: 'max-content', background: '#fff', boxShadow: '0 2px 8px #0001', borderRadius: 8, margin: '0 2rem 0 0' }}>
     <colgroup>
       <col style={{ width: 60 }} />
@@ -66,17 +68,27 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
         return (
           <tr key={task.id} style={{ borderBottom: '1px solid #eee', whiteSpace: 'nowrap' }}>
             <td>
-              <button
-                onClick={() => setEditRow(isEdit ? null : task.id)}
-                style={{ marginRight: 4, fontSize: 18, padding: '2px 8px', borderRadius: 6, background: isEdit ? '#039be5' : '#aaa', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                title={isEdit ? '編集モードON' : '編集モードOFF'}
-              >
-                {isEdit ? (
-                  <span role="img" aria-label="unlock">🔓</span>
-                ) : (
-                  <span role="img" aria-label="lock">🔒</span>
-                )}
-              </button>
+              {deleteMode ? (
+                <button
+                  onClick={() => handleDelete(task.id)}
+                  style={{ fontSize: 18, padding: '2px 8px', borderRadius: 6, background: '#ff5252', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title="この顧客を削除"
+                >
+                  <FaTrashAlt />
+                </button>
+              ) : (
+                <button
+                  onClick={() => setEditRow(isEdit ? null : task.id)}
+                  style={{ margin: 0, fontSize: 18, padding: '2px 8px', borderRadius: 6, background: isEdit ? '#039be5' : '#aaa', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title={isEdit ? '編集モードON' : '編集モードOFF'}
+                >
+                  {isEdit ? (
+                    <FaLockOpen />
+                  ) : (
+                    <FaLock />
+                  )}
+                </button>
+              )}
             </td>
             <td style={{whiteSpace: 'nowrap'}}>
               {/* バイク写真 */}

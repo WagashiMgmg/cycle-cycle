@@ -1,11 +1,12 @@
 import { useMemo, useState, useRef, useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
 import './App.css';
-import { FaTools } from 'react-icons/fa';
+import { FaTools, FaPlus, FaMinus, FaTrashAlt, FaLock, FaLockOpen } from 'react-icons/fa';
 import { statuses } from './types/BikeRepairTask';
 import { GanttTable } from './components/GanttTable';
 import { getDatesArray } from './utils/ganttUtils';
 import type { BikeRepairTask, Status } from './types/BikeRepairTask';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [taskList, setTaskList] = useState<BikeRepairTask[]>([
@@ -43,6 +44,7 @@ function App() {
   const [editRow, setEditRow] = useState<string | null>(null);
   // ガントチャートの表示日数
   const [ganttDays, setGanttDays] = useState(30);
+  const [deleteMode, setDeleteMode] = useState(false);
 
   // ソート・検索用state
   const [sortKey, setSortKey] = useState<null | keyof BikeRepairTask>(null);
@@ -104,12 +106,12 @@ function App() {
 
   // アイテム追加ハンドラ
   const handleAdd = () => {
-    const n = taskList.length + 1;
+    const newId = uuidv4();
     setTaskList([
       ...taskList,
       {
-        id: String(n),
-        name: `新規顧客${n}`,
+        id: newId,
+        name: `客`,
         phone: '',
         email: '',
         photoUrl: '', // デフォルトは空
@@ -159,6 +161,11 @@ function App() {
     );
   };
 
+  const handleDelete = (id: string) => {
+    setTaskList(list => list.filter(task => task.id !== id));
+    if (editRow === id) setEditRow(null);
+  };
+
   return (
     <div ref={containerRef} style={{
       width: '100vw',
@@ -195,7 +202,34 @@ function App() {
           </h1>
         </div>
         <div style={{ position: 'absolute', left: 180, top: 10, display: 'flex', gap: 12, alignItems: 'center', zIndex: 2 }}>
-          <button onClick={handleAdd} style={{ fontSize: 20, padding: '4px 16px', borderRadius: 8, background: 'linear-gradient(90deg, #2563eb 0%, #039be5 100%)', color: '#fff', border: 'none', cursor: 'pointer', boxShadow: '0 2px 8px #2563eb44', fontWeight: 700, letterSpacing: 1 }}>＋</button>
+          <button onClick={handleAdd} 
+            disabled={deleteMode}
+            style={{ 
+              fontSize: 20, 
+              padding: '4px 16px', 
+              borderRadius: 8, 
+              background: deleteMode ? '#bfc9db' : 'linear-gradient(90deg, #2563eb 0%, #039be5 100%)', 
+              color: '#fff', 
+              border: 'none', 
+              cursor: deleteMode ? 'not-allowed' : 'pointer', 
+              boxShadow: '0 2px 8px #2563eb44', 
+              fontWeight: 700, 
+              letterSpacing: 1, 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              opacity: deleteMode ? 0.5 : 1
+            }}
+          >
+            <FaPlus style={{ fontSize: 20, marginRight: 2 }} />
+          </button>
+          <button
+            onClick={() => setDeleteMode(d => !d)}
+            style={{ fontSize: 20, padding: '4px 16px', borderRadius: 8, background: deleteMode ? '#ff5252' : '#fff', color: deleteMode ? '#fff' : '#ff5252', border: '2px solid #ff5252', cursor: 'pointer', fontWeight: 700, letterSpacing: 1, boxShadow: deleteMode ? '0 2px 8px #ff525288' : '0 2px 8px #ff525211', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            title={deleteMode ? '削除モード解除' : '削除モード'}
+          >
+            <FaMinus style={{ fontSize: 20, marginRight: 2 }} />
+          </button>
         </div>
         <div style={{ position: 'absolute', right: Math.max((containerWidth - 1280) / 2, 32), top: 16, display: 'flex', gap: 12, alignItems: 'center' }}>
           <label style={{ fontWeight: 700, color: '#2563eb', fontSize: 16, textShadow: '0 1px 0 #fff' }}>
@@ -233,6 +267,8 @@ function App() {
             setSortKey={setSortKey}
             sortAsc={sortAsc}
             setSortAsc={setSortAsc}
+            handleDelete={handleDelete}
+            deleteMode={deleteMode}
           />
         </div>
       </div>

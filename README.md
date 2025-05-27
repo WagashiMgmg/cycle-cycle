@@ -166,3 +166,12 @@ MIT
 - **納車日マーク**: 赤色三角（`#ff5252`）
 - **電話番号・メール・作業メニュー・メモ**: それぞれブルーやオレンジ系で色分け
 - **全体的に**: 角丸・シャドウ・太字・配色コントラストで業務用の視認性と高級感を両立
+
+## アイコン
+
+- ゴミ箱マーク: [react-icons](https://react-icons.github.io/react-icons/) の `FaTrashAlt` を使用（削除モード時の行左端）
+- 鍵マーク: `FaLock`（ロック時）/`FaLockOpen`（アンロック時）を使用（編集モード切替ボタン）
+- 追加・削除ボタン: `FaPlus`, `FaMinus`
+- バイク画像デフォルト: `FaBicycle`
+
+すべて [react-icons](https://react-icons.github.io/react-icons/) のFontAwesomeアイコンで統一し、業務用UIの視認性・操作性を向上。
