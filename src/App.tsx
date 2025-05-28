@@ -90,10 +90,6 @@ function App() {
         if (sortKey === 'estimatedHours') {
           va = Number(va); vb = Number(vb);
         }
-        if (sortKey === 'deadline' || sortKey === 'start') {
-          va = va || '';
-          vb = vb || '';
-        }
         if (sortKey === 'status') {
           va = statuses.indexOf(va as Status);
           vb = statuses.indexOf(vb as Status);
@@ -142,14 +138,19 @@ function App() {
         if (task.id !== id) return task;
         if (key === 'estimatedHours') {
           // 想定時間変更時はendも自動計算
-          const hours = Number(value);
-          const start = dayjs(task.start);
-          const days = Math.ceil(hours / 8);
-          return {
-            ...task,
-            estimatedHours: hours,
-            end: start.add(days - 1, 'day').format('YYYY-MM-DD'),
-          };
+  const parsedHours = Number(value);
+  if (parsedHours > 0) {
+    const start = dayjs(task.start);
+    const days = Math.ceil(parsedHours / 8);
+    return {
+      ...task,
+      estimatedHours: parsedHours,
+      end: start.add(days - 1, 'day').format('YYYY-MM-DD'),
+    };
+  } else {
+    // If not positive, return the original task without changes to estimatedHours or end
+    return task;
+  }
         }
         if (key === 'start') {
           // 着手日変更時はendも自動計算

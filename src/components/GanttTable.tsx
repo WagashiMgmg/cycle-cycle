@@ -227,25 +227,60 @@ export const GanttTable: React.FC<GanttTableProps> = ({ taskList, editRow, setEd
                 <span style={{ color: '#f59e42', fontWeight: 500 }}>{task.memo}</span>
               )}
             </td>
-            {dates.map((date, i) => {
-              if (i === startIdx) {
-                return (
-                  <td key={date} colSpan={endIdx - startIdx + 1} style={{ padding: 0, background: '#e0f7fa', position: 'relative' }}>
-                    <div style={{ height: 24, background: statusColor(task.status), borderRadius: 4, position: 'relative' }}>
-                      {/* 納車日マーク */}
-                      {deadlineIdx >= startIdx && deadlineIdx <= endIdx && (
-                        <div style={{ position: 'absolute', left: ((deadlineIdx - startIdx) / (endIdx - startIdx + 1)) * 100 + '%', top: 0, width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '12px solid #ff5252' }} title="納車日"></div>
-                      )}
-                    </div>
-                  </td>
-                );
-              }
-              if (i > startIdx && i <= endIdx) return null;
-              if (i === deadlineIdx && (deadlineIdx < startIdx || deadlineIdx > endIdx)) {
-                return <td key={date}><FaFlagCheckered/></td>;
-              }
-              return <td key={date}></td>;
-            })}
+            {/* Conditional rendering for Gantt bar */}
+            {startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx ? (
+              // Logic for rendering the bar using colSpan
+              dates.map((date, i) => {
+                if (i === startIdx) {
+                  return (
+                    <td key={date} colSpan={endIdx - startIdx + 1} style={{ padding: 0, background: '#e0f7fa', position: 'relative' }}>
+                      <div style={{ height: 24, background: statusColor(task.status), borderRadius: 4, position: 'relative' }}>
+                        {/* Deadline marker: triangle on bar */}
+                        {deadlineIdx >= startIdx && deadlineIdx <= endIdx && deadlineIdx !== -1 && (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              left: `${((deadlineIdx - startIdx) / (endIdx - startIdx + 1)) * 100}%`,
+                              top: 0, // Adjusted for triangle pointing down
+                              width: 0,
+                              height: 0,
+                              borderLeft: '8px solid transparent',
+                              borderRight: '8px solid transparent',
+                              borderBottom: '12px solid #ff5252', // Triangle color
+                            }}
+                            title={`Deadline: ${task.deadline}`}
+                          />
+                        )}
+                      </div>
+                    </td>
+                  );
+                }
+                if (i > startIdx && i <= endIdx) return null; // These cells are covered by colSpan
+
+                // Deadline marker: flag outside bar (but bar exists)
+                if (i === deadlineIdx && deadlineIdx !== -1) {
+                  return (
+                    <td key={date} style={{ textAlign: 'center', color: 'red', position: 'relative' }}>
+                      <FaFlagCheckered title={`Deadline: ${task.deadline}`} />
+                    </td>
+                  );
+                }
+                return <td key={date}></td>;
+              })
+            ) : (
+              // Logic for when the bar cannot be drawn correctly
+              dates.map((date, i) => {
+                // Deadline marker: flag (bar does not exist or is invalid)
+                if (i === deadlineIdx && deadlineIdx !== -1) {
+                  return (
+                    <td key={date} style={{ textAlign: 'center', color: 'red', position: 'relative' }}>
+                      <FaFlagCheckered title={`Deadline: ${task.deadline}`} />
+                    </td>
+                  );
+                }
+                return <td key={date}></td>;
+              })
+            )}
           </tr>
         );
       })}
